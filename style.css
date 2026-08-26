@@ -8,10 +8,9 @@ align-items: center;
 flex-direction: column;
 }
 .top-bar {
-gap: 50px;
 display: flex;
+align-items: center;
 border-bottom: 0.5px solid black;
-padding-bottom: 5px;
 }
 .circle {
     width: 300px;
@@ -61,4 +60,14 @@ padding-bottom: 5px;
 .bt {
     background-color: transparent;
     border: transparent;
+}
+.btnn {
+    background-color: rgba(255,255,255,0.1);
+    border: transparent;
+    margin: 3px;
+    margin-left: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
 }
