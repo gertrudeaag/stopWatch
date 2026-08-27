@@ -24,20 +24,20 @@
                         <h2>Stopwatch Settings</h2>
 
                         <label for="timeFormat">Time Format</label>
-                        <input type="text" id="timeFormat" placeholder="hh:min:sec">
+                        <input type="time" id="timeFormat" step="1">
 
                         <label>
                             Sound
                             <input type="checkbox" id="sound">
-                            </label>
-                      <label for="shortBreak">
-                        Short Break  
-                        <input type="text" id="shortTime" placeholder="min:sec">
-                            </label>
-                      <label for="longBreak">
-                        Long Break  
-                        <input type="text" id="longTime" placeholder="min:sec">
-                           </label>
+                        </label>
+                        <label for="shortBreak">
+                            Short Break
+                            <input type="time" id="shortTime" step="1">
+                        </label>
+                        <label for="longBreak">
+                            Long Break
+                            <input type="time" id="longTime" step="1">
+                        </label>
                         <div class="modal-buttons">
                             <button class="btnn" id="cancelBtn">Cancel</button>
                             <button class="btnn" id="saveBtn">Save</button>
@@ -67,7 +67,7 @@
         <p>Time to focus</p>
         <button class="btn1" id="btn1">Reset</button>
     </div>
-        <script src="./script.js"></script>
+    <script src="./script.js"></script>
 </body>
 
 </html>

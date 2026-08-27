@@ -24,18 +24,28 @@ function updateDisplay(secondsRemaining) {
     timerId.textContent = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 }
 
+function formatTimeInput(totalSeconds) {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    return [hours, minutes, seconds]
+        .map((part) => String(part).padStart(2, "0"))
+        .join(":");
+}
+
 function parseDuration(value) {
     const parts = value.trim().split(":").map(Number);
 
-    if (parts.some((part) => !Number.isInteger(part) || part < 0)) {
+    if (parts.length !== 2 && parts.length !== 3 || parts.some((part) => !Number.isInteger(part) || part < 0)) {
         return null;
     }
 
-    if (parts.length === 1) return parts[0];
-    if (parts.length === 2) return (parts[0] * 60) + parts[1];
-    if (parts.length === 3) return (parts[0] * 3600) + (parts[1] * 60) + parts[2];
+    const [hours, minutes, seconds = 0] = parts.length === 2 ? [parts[0], parts[1], 0] : parts;
 
-    return null;
+    if (minutes > 59 || seconds > 59) return null;
+
+    return (hours * 3600) + (minutes * 60) + seconds;
 }
 
 function startWorkTimer() {
@@ -149,8 +159,9 @@ const shortTime = document.getElementById("shortTime");
 const longTime = document.getElementById("longTime");
 
 settingsBtn.addEventListener("click", function() {
-    shortTime.value = `${String(Math.floor(DURATION.shortBreak / 60)).padStart(2, "0")}:${String(DURATION.shortBreak % 60).padStart(2, "0")}`;
-    longTime.value = `${String(Math.floor(DURATION.longBreak / 60)).padStart(2, "0")}:${String(DURATION.longBreak % 60).padStart(2, "0")}`;
+    timeFormat.value = formatTimeInput(timeleft);
+    shortTime.value = formatTimeInput(DURATION.shortBreak);
+    longTime.value = formatTimeInput(DURATION.longBreak);
     settingsModal.showModal();
 });
 closeModalBtn.addEventListener("click", function() {
