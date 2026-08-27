@@ -149,8 +149,8 @@ const shortTime = document.getElementById("shortTime");
 const longTime = document.getElementById("longTime");
 
 settingsBtn.addEventListener("click", function() {
-    shortTime.value = `${String(Math.floor(DURATION.shortBreak / 60)).padStart(2, "0")}:${String(DURATION.shortBreak % 60).padStart(2, "0")}`;
-    longTime.value = `${String(Math.floor(DURATION.longBreak / 60)).padStart(2, "0")}:${String(DURATION.longBreak % 60).padStart(2, "0")}`;
+    shortTime.value = `${String(Math.floor(DURATION.shortBreak / 60)).padStart(2, "00")}:${String(DURATION.shortBreak % 60).padStart(2, "00")}`;
+    longTime.value = `${String(Math.floor(DURATION.longBreak / 60)).padStart(2, "00")}:${String(DURATION.longBreak % 60).padStart(2, "00")}`;
     settingsModal.showModal();
 });
 closeModalBtn.addEventListener("click", function() {
