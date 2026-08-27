@@ -165,7 +165,7 @@ if (parts.length === 2 ) {
 if (!isNaN(totalSeconds) && totalSeconds > 0) {
     timeleft = totalSeconds;
 updateDisplay(timeleft);
-settingsModal.close();
+
 } else {
     alert("Please enter a valid time.");
 }
