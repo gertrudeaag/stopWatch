@@ -24,6 +24,20 @@ function updateDisplay(secondsRemaining) {
     timerId.textContent = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 }
 
+function parseDuration(value) {
+    const parts = value.trim().split(":").map(Number);
+
+    if (parts.some((part) => !Number.isInteger(part) || part < 0)) {
+        return null;
+    }
+
+    if (parts.length === 1) return parts[0];
+    if (parts.length === 2) return (parts[0] * 60) + parts[1];
+    if (parts.length === 3) return (parts[0] * 3600) + (parts[1] * 60) + parts[2];
+
+    return null;
+}
+
 function startWorkTimer() {
     if (timerT !== null) return;
 
@@ -63,7 +77,7 @@ resetButton.addEventListener("click", function () {
 });
 
 shortBreak.addEventListener("click", function () {
-    if (breakT !== null) return;
+
 
     if (timerT !== null) {
         clearInterval(timerT);
@@ -73,6 +87,7 @@ shortBreak.addEventListener("click", function () {
     savedTimeleft = timeleft;
     startBtn.disabled = true;
 
+    
     breakT = setTimeout(() => {
         breakT = null;
         timeleft = savedTimeleft;
@@ -80,24 +95,27 @@ shortBreak.addEventListener("click", function () {
         updateDisplay(timeleft);
         startWorkTimer();
     }, DURATION.shortBreak * 1000);
+startBtn.disabled = false;
 });
 
 longBreak.addEventListener("click", function () {
-    // if (longT !== null) return;
+     //if (longT !== null) return;
 
     if (timerT !== null) {
         clearInterval(timerT);
         timerT = null;
-    }
+    } 
+
     savedTimeleft = timeleft;
     startBtn.disabled = true;
-    longT = setTimeout(() => {
-        longT = null;
+    breakT = setTimeout(() => {
+        breakT = null;
         timeleft = savedTimeleft;
         savedTimeleft = null;
         updateDisplay(timeleft);
         startWorkTimer();
     }, DURATION.longBreak * 1000);
+    startBtn.disabled = false;
 });
 
 startBtn.addEventListener("click", function () {
@@ -128,10 +146,12 @@ const closeModalBtn = document.getElementById("closeModal");
 const cancelBtn = document.getElementById("cancelBtn");
 const saveBtn = document.getElementById("saveBtn");
 const timeFormat = document.getElementById("timeFormat");
-
-//let currentFormat ="ms";
+const shortTime = document.getElementById("shortTime");
+const longTime = document.getElementById("longTime");
 
 settingsBtn.addEventListener("click", function() {
+    shortTime.value = `${Math.floor(DURATION.shortBreak / 60)}:${String(DURATION.shortBreak % 60).padStart(2, "0")}`;
+    longTime.value = `${Math.floor(DURATION.longBreak / 60)}:${String(DURATION.longBreak % 60).padStart(2, "0")}`;
     settingsModal.showModal();
 });
 closeModalBtn.addEventListener("click", function() {
@@ -142,31 +162,18 @@ settingsModal.close();
 });
 
 saveBtn.addEventListener("click", function(){
-const inputVal = timeFormat.value.trim();
-const parts =inputVal.split(":");
-let totalSeconds = 0;
+const totalSeconds = parseDuration(timeFormat.value);
+const shortBreakSeconds = parseDuration(shortTime.value);
+const longBreakSeconds = parseDuration(longTime.value);
 
-if (parts.length === 2 ) {
-    const minutes = parseInt(parts[0], 10);
-    const seconds = parseInt(parts[1], 10);
-    if (!isNaN(minutes) && !isNaN(seconds)) {
-        totalSeconds = (minutes * 60) + seconds;
-    }
-} else if (parts.length === 3){
-    const hours = parseInt(parts[0], 10);
-    const minutes =parseInt(parts[1], 10);
-    const seconds =parseInt(parts[2], 10);
-    totalSeconds = (hours * 3600) + (minutes * 60) +seconds;
-} else {
-    totalSeconds = parseInt(inputVal, 10);
-}
-
-
-if (!isNaN(totalSeconds) && totalSeconds > 0) {
+if (totalSeconds > 0 && shortBreakSeconds > 0 && longBreakSeconds > 0) {
+    DURATION.shortBreak = shortBreakSeconds;
+    DURATION.longBreak = longBreakSeconds;
     timeleft = totalSeconds;
 updateDisplay(timeleft);
-
+settingsModal.close();
 } else {
     alert("Please enter a valid time.");
+
 }
 });

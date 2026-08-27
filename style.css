@@ -71,3 +71,8 @@ border-bottom: 0.5px solid black;
     align-items: center;
 
 }
+.setting {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
